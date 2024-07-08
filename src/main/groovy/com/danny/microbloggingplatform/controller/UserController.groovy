@@ -6,6 +6,7 @@ import com.danny.microbloggingplatform.service.PostService
 import com.danny.microbloggingplatform.service.UserService
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -44,21 +45,21 @@ class UserController {
     }
 
     @GetMapping("/{userId}/posts")
-    ResponseEntity<List<Post>> getUsersPosts(
+    ResponseEntity<Page<Post>> getUsersPosts(
             @PathVariable("userId") ObjectId userId,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size) {
-        List<Post> posts = userService.getUsersPosts(userId, page, size)
+        Page<Post> posts = userService.getUsersPosts(userId, page, size)
         return ResponseEntity.ok(posts)
     }
 
     @GetMapping("/feed")
-    ResponseEntity<List<Post>> getUsersFeed(
+    ResponseEntity<Page<Post>> getUsersFeed(
             @AuthenticationPrincipal User authenticatedUser,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size) {
         List<ObjectId> following = userService.getUsersFollowing(authenticatedUser.id)
-        List<Post> posts = postService.getAllPost(following, page, size)
+        Page<Post> posts = postService.getAllPost(following, page, size)
         return ResponseEntity.ok(posts)
     }
 }
