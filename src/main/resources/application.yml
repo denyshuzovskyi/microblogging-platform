@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: microblogging-platform
+  data:
+    mongodb:
+      username: root
+      password: password
+      host: localhost
+      port: 27017
+      database: microblog
+      auto-index-creation:  true
+      authentication-database: admin
+server:
+  port: 8080
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.danny.microbloggingplatform: TRACE
+  file:
+    name: logs/microblogging-platform.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"

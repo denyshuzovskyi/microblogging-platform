@@ -1,0 +1,16 @@
+services:
+  mongo:
+    container_name: microblogging-platform-mongo
+    image: mongo
+    restart: no
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: microblog
+    volumes:
+      - ./mongodb:/data/db
+    ports:
+      - "27017:27017"
+
+networks:
+  main:
