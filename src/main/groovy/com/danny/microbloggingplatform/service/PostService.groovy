@@ -9,6 +9,8 @@ import com.danny.microbloggingplatform.model.Post
 import com.danny.microbloggingplatform.repository.PostRepository
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 
 @Service
@@ -46,7 +48,8 @@ class PostService {
         postRepository.comment(postId, comment)
     }
 
-    List<Post> getAllPost(List<ObjectId> userIds) {
-        return postRepository.findAllWhereUserIdIn(userIds)
+    List<Post> getAllPost(List<ObjectId> userIds, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending())
+        return postRepository.findAllByUserIdIn(userIds, pageRequest)
     }
 }

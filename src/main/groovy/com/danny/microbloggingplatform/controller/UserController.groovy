@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -43,15 +44,21 @@ class UserController {
     }
 
     @GetMapping("/{userId}/posts")
-    ResponseEntity<List<Post>> getUsersPosts(@PathVariable("userId") ObjectId userId) {
-        List<Post> posts = userService.getUsersPosts(userId)
+    ResponseEntity<List<Post>> getUsersPosts(
+            @PathVariable("userId") ObjectId userId,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        List<Post> posts = userService.getUsersPosts(userId, page, size)
         return ResponseEntity.ok(posts)
     }
 
     @GetMapping("/feed")
-    ResponseEntity<List<Post>> getUsersFeed(@AuthenticationPrincipal User authenticatedUser) {
+    ResponseEntity<List<Post>> getUsersFeed(
+            @AuthenticationPrincipal User authenticatedUser,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
         List<ObjectId> following = userService.getUsersFollowing(authenticatedUser.id)
-        List<Post> posts = postService.getAllPost(following)
+        List<Post> posts = postService.getAllPost(following, page, size)
         return ResponseEntity.ok(posts)
     }
 }

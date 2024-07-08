@@ -22,7 +22,7 @@ class TokenService {
         tokenRepository.deleteByUsername(username)
     }
 
-    private Token createToken(String username) {
+    private static Token createToken(String username) {
         Token token = new Token()
         token.token = UUID.randomUUID().toString()
         token.username = username

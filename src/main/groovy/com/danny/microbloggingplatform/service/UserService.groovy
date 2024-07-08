@@ -7,6 +7,8 @@ import com.danny.microbloggingplatform.repository.UserRepository
 import com.danny.microbloggingplatform.service.exception.UserNotFoundException
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 
 @Service
@@ -33,8 +35,9 @@ class UserService {
         userRepository.pullFromFollowers(userIdToUnfollow, userId)
     }
 
-    List<Post> getUsersPosts(ObjectId userId) {
-        return postRepository.findAllByUserId(userId)
+    List<Post> getUsersPosts(ObjectId userId, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending())
+        return postRepository.findAllByUserId(userId, pageRequest)
     }
 
     List<ObjectId> getUsersFollowing(ObjectId userId) {
